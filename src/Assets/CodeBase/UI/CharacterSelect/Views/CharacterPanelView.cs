@@ -1,38 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using CodeBase.UI.AbstractWindow;
 using CodeBase.UI.CharacterSelect.Enums;
 using DG.Tweening;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.CharacterSelect.Views
 {
-    public class CharacterPanelView : MonoBehaviour
+    public class CharacterPanelView : AbstractWindowBase
     {
         [SerializeField] private List<CharacterView> _characterViews;
         [SerializeField] private Transform _characterLayout;
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private float _scrollDuration = 0.3f;
         [SerializeField] private float _initialXPosition = 260f;
+        [SerializeField] private HorizontalLayoutGroup _horizontalLayoutGroup;
 
+        private readonly Subject<CharacterTypeId> _onCharacterSelected = new();
+        
         private CharacterView _currentCharacter;
         private RectTransform _scrollContent;
-        private Tweener _scrollTweener; 
+        private Tweener _scrollTween;
 
         public Transform CharacterLayout => _characterLayout;
 
-        private void Awake()
+        public IObservable<CharacterTypeId> OnCharacterSelected => _onCharacterSelected;
+
+        protected override void OnAwake()
         {
             _scrollContent = _scrollRect.content;
             _scrollContent.anchoredPosition = new Vector2(_initialXPosition, _scrollContent.anchoredPosition.y);
         }
 
-        private void OnDestroy()
-        {
-            _scrollTweener?.Kill();
-        }
+        private void OnDestroy() => _scrollTween?.Kill();
+        
+        public void ForceLayoutRebuild() => LayoutRebuilder.ForceRebuildLayoutImmediate(_scrollContent);
 
-        public void Add(IEnumerable<CharacterView> characterViews) => _characterViews.AddRange(characterViews);
+        public void SetCharacters(IEnumerable<CharacterView> characterViews)
+        {
+            _characterViews.AddRange(characterViews);
+
+            SubscribeCharacterSelectedEvent();
+        }
 
         public void RaiseCharacter(CharacterTypeId id)
         {
@@ -49,14 +61,11 @@ namespace CodeBase.UI.CharacterSelect.Views
         {
             if(character == null)
                 return;
-            
+
             Vector3 characterPosition = character.RectTransform.position;
             Vector3 viewportPosition = _scrollRect.viewport.position;
-
-            bool isVisible = RectTransformUtility.RectangleContainsScreenPoint(
-                _scrollRect.viewport,
-                characterPosition,
-                null);
+            
+            bool isVisible = RectTransformUtility.RectangleContainsScreenPoint(_scrollRect.viewport, characterPosition, null);
 
             if (!isVisible)
                 MoveScrollToSeeItem(characterPosition, viewportPosition);
@@ -64,17 +73,27 @@ namespace CodeBase.UI.CharacterSelect.Views
 
         private void MoveScrollToSeeItem(Vector3 characterPosition, Vector3 viewportPosition)
         {
-            _scrollTweener?.Kill();
+            _scrollTween?.Kill();
             
             float targetX = _scrollContent.anchoredPosition.x - (characterPosition.x - viewportPosition.x);
 
-            _scrollTweener = DOTween.To(
+            _scrollTween = DOTween.To(
                     () => _scrollContent.anchoredPosition.x,
                     x => _scrollContent.anchoredPosition = new Vector2(x, _scrollContent.anchoredPosition.y),
                     targetX,
                     _scrollDuration)
                 .SetEase(Ease.OutQuad)
-                .OnKill(() => _scrollTweener = null);
+                .OnKill(() => _scrollTween = null);
+        }
+
+        private void SubscribeCharacterSelectedEvent()
+        {
+            foreach (CharacterView characterView in _characterViews)
+            {
+                characterView.OnSelectedButtonClicked?.Subscribe(_ => 
+                        _onCharacterSelected?.OnNext(characterView.Id))
+                    .AddTo(this);
+            }
         }
     }
 }

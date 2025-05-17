@@ -10,13 +10,18 @@ namespace CodeBase.UI.AbstractWindow
         [SerializeField] protected CanvasAnimator CanvasAnimator;
         
         private readonly Subject<Unit> _onOpenStarted = new();
+        private readonly Subject<Unit> _onOpened= new();
 
         public IObservable<Unit> OnOpenStartedEvent => _onOpenStarted;
+        
+        public IObservable<Unit> OnOpened => _onOpened;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if(CanvasAnimator == null)
                 CanvasAnimator = GetComponent<CanvasAnimator>();
+
+            OnAwake();
         }
 
         public void Open(Action onOpened = null)
@@ -33,11 +38,8 @@ namespace CodeBase.UI.AbstractWindow
             CanvasAnimator.Hide(() => MarkClosed(onClosed));
         }
 
-        private void MarkClosed(Action onClosed)
+        protected virtual void OnAwake()
         {
-            OnClose();
-            onClosed?.Invoke();
-            Destroy(gameObject);
         }
 
         protected virtual void OnOpenStarted()
@@ -56,6 +58,14 @@ namespace CodeBase.UI.AbstractWindow
         {
             OnOpen();
             onOpened?.Invoke();
+            _onOpened?.OnNext(default);
+        }
+
+        private void MarkClosed(Action onClosed)
+        {
+            OnClose();
+            onClosed?.Invoke();
+            Destroy(gameObject);
         }
     }
 }

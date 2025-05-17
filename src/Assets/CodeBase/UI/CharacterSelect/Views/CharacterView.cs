@@ -1,5 +1,7 @@
-﻿using CodeBase.Animations;
+﻿using System;
+using CodeBase.Animations;
 using CodeBase.UI.CharacterSelect.Enums;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +16,9 @@ namespace CodeBase.UI.CharacterSelect.Views
         [SerializeField] private Image _background;
         [SerializeField] private VerticalMoveAnimator _verticalMoveAnimator;
         [SerializeField] private SliderAnimator _sliderAnimator;
+        [SerializeField] private Button _selectedButton;
+        
+        public IObservable<Unit> OnSelectedButtonClicked => _selectedButton?.OnClickAsObservable();
 
         public RectTransform RectTransform => _rectTransform;
 

@@ -3,6 +3,7 @@ using System.Linq;
 using CodeBase.Common.Services.Persistent;
 using CodeBase.Data;
 using CodeBase.UI.CharacterSelect.Configs;
+using CodeBase.UI.CharacterSelect.Enums;
 using UniRx;
 using Zenject;
 
@@ -19,7 +20,7 @@ namespace CodeBase.UI.CharacterSelect.Services
         public IReadOnlyList<CharacterData> Characters => _characters;
 
         public IReadOnlyReactiveProperty<CharacterData> CurrentCharacter => _currentCharacter;
-        
+
         public CharacterSelectionService(CharacterConfig characterConfig) => _characterConfig = characterConfig;
 
         public void Initialize() => _characters.AddRange(_characterConfig.Characters);
@@ -42,15 +43,30 @@ namespace CodeBase.UI.CharacterSelect.Services
             _currentCharacter.Value = _characters[_currentCharacterIndex];
         }
 
-        public void Save(ProgressData progressData) => progressData.PlayerData.LastSelectedCharacter = _currentCharacter.Value;
+        public void SetCharacter(CharacterTypeId characterId)
+        {
+            CharacterData targetCharacter = _characters.Find(x => x.TypeId == characterId);
+
+            _currentCharacterIndex = _characters.IndexOf(targetCharacter);
+            _currentCharacter.Value = targetCharacter;
+        }
+
+        public void Save(ProgressData progressData)
+        {
+            progressData.PlayerData.LastSelectedCharacter = _currentCharacter.Value;
+            progressData.PlayerData.LastSelectedCharacterIndex = _currentCharacterIndex;
+        }
 
         public void Load(ProgressData progressData)
         {
             CharacterData lastSavedCharacter = progressData.PlayerData.LastSelectedCharacter;
 
-            CharacterData characterData = _characterConfig.Characters.FirstOrDefault(x => x.TypeId == lastSavedCharacter.TypeId);
+            CharacterData characterData =
+                _characterConfig.Characters.FirstOrDefault(x => x.TypeId == lastSavedCharacter.TypeId);
             lastSavedCharacter.SetIcons(characterData.Icon, characterData.Background, characterData.MainBackground);
+
             _currentCharacter.Value = lastSavedCharacter;
+            _currentCharacterIndex = progressData.PlayerData.LastSelectedCharacterIndex;
         }
     }
 }

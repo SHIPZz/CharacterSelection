@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using CodeBase.Infrastructure.States.StateMachine;
 using CodeBase.Infrastructure.States.States;
 using CodeBase.UI.CharacterSelect.Configs;
-using CodeBase.UI.CharacterSelect.Factory;
 using CodeBase.UI.CharacterSelect.Services;
 using CodeBase.UI.CharacterSelect.Views;
 using CodeBase.UI.Controllers;
 using CodeBase.UI.Services.Window;
 using UniRx;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace CodeBase.UI.CharacterSelect.Controllers
@@ -17,7 +17,6 @@ namespace CodeBase.UI.CharacterSelect.Controllers
         private readonly IWindowService _windowService;
         private readonly IStateMachine _stateMachine;
         private readonly ICharacterSelectionService _characterService;
-        private readonly ICharacterUIFactory _characterUIFactory;
         private readonly CompositeDisposable _disposables = new();
 
         private CharacterSelectWindow _window;
@@ -25,24 +24,17 @@ namespace CodeBase.UI.CharacterSelect.Controllers
         public CharacterSelectWindowController(
             IWindowService windowService,
             IStateMachine stateMachine,
-            ICharacterSelectionService characterService,
-            ICharacterUIFactory characterUIFactory)
+            ICharacterSelectionService characterService)
         {
             _stateMachine = stateMachine;
             _windowService = windowService;
             _characterService = characterService;
-            _characterUIFactory = characterUIFactory;
         }
 
         public void Initialize()
         {
             _window.OnPreviousCharacterClicked
                 .Subscribe(_ => OnPreviousCharacterClicked())
-                .AddTo(_disposables);
-
-            _window
-                .OnOpenStartedEvent
-                .Subscribe(_ => CreateCharacters())
                 .AddTo(_disposables);
 
             _window.OnNextCharacterClicked
@@ -58,20 +50,8 @@ namespace CodeBase.UI.CharacterSelect.Controllers
                 .AddTo(_disposables);
 
             _window.SwitchCharacter(_characterService.CurrentCharacter.Value);
-        }
 
-        private void CreateCharacters()
-        {
-            using (ListPool<CharacterView>.Get(out List<CharacterView> characterViews))
-            {
-                foreach (CharacterData characterData in _characterService.Characters)
-                {
-                    CharacterView createdView = _characterUIFactory.CreateCharacterView(_window.CharacterLayout, characterData);
-                    characterViews.Add(createdView);
-                }
-
-                _window.SetCharacters(characterViews);
-            }
+            _windowService.OpenWindowInParent<CharacterPanelView>(_window.CharacterPanelViewParent);
         }
 
         public void BindView(CharacterSelectWindow window) => _window = window;

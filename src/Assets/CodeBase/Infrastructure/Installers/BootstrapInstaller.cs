@@ -8,7 +8,6 @@ using CodeBase.Infrastructure.States.Factory;
 using CodeBase.Infrastructure.States.StateMachine;
 using CodeBase.Infrastructure.States.States;
 using CodeBase.StaticData;
-using CodeBase.UI.CharacterSelect;
 using CodeBase.UI.CharacterSelect.Factory;
 using CodeBase.UI.CharacterSelect.Services;
 using CodeBase.UI.Services;

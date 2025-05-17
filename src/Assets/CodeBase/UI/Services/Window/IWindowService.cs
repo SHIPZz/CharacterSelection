@@ -3,6 +3,7 @@ using System.Threading;
 using CodeBase.UI.AbstractWindow;
 using CodeBase.UI.Controllers;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace CodeBase.UI.Services.Window
 {
@@ -27,5 +28,6 @@ namespace CodeBase.UI.Services.Window
             where TWindow : AbstractWindowBase;
 
         void CloseAll(Action onAllClosed = null);
+        TWindow OpenWindowInParent<TWindow>(Transform parent, bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase;
     }
 }

@@ -10,13 +10,15 @@ namespace CodeBase.UI.CharacterSelect.Configs
     {
         public CharacterTypeId TypeId;
         public string Name;
+        public float Progress;
+        public int PlacedIndex;
+        
         [JsonIgnore] public Sprite Icon;
         [JsonIgnore] public Sprite Background;
         [JsonIgnore] public Sprite MainBackground;
-        public float Progress;
 
         public CharacterData(CharacterTypeId typeId, string name, Sprite icon, Sprite background, float progress,
-            Sprite mainBackground)
+            Sprite mainBackground, int placedIndex = 0)
         {
             TypeId = typeId;
             Name = name;
@@ -24,6 +26,7 @@ namespace CodeBase.UI.CharacterSelect.Configs
             Background = background;
             Progress = progress;
             MainBackground = mainBackground;
+            PlacedIndex = placedIndex;
         }
 
         public void SetIcons(Sprite icon, Sprite background, Sprite mainBackground)

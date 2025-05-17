@@ -81,6 +81,16 @@ namespace CodeBase.UI.Services.Window
 
         public TWindow OpenWindow<TWindow>(bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase
         {
+            return OpenWindowInternal<TWindow>(_uiProvider.MainUI, onTop, onOpened);
+        }
+
+        public TWindow OpenWindowInParent<TWindow>(Transform parent, bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase
+        {
+            return OpenWindowInternal<TWindow>(parent, onTop, onOpened);
+        }
+
+        private TWindow OpenWindowInternal<TWindow>(Transform parent, bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase
+        {
             Type windowType = typeof(TWindow);
 
             if (!_windowBindings.TryGetValue(windowType, out var bindingInfo))
@@ -94,8 +104,7 @@ namespace CodeBase.UI.Services.Window
                 return window;
             }
 
-            TWindow createdWindow =
-                _instantiator.InstantiatePrefabForComponent<TWindow>(bindingInfo.Prefab, _uiProvider.MainUI);
+            TWindow createdWindow = _instantiator.InstantiatePrefabForComponent<TWindow>(bindingInfo.Prefab, parent);
 
             if(createdWindow is null)
                 throw new ArgumentNullException(nameof(createdWindow));

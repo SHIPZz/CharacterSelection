@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CodeBase.UI.CharacterSelect.Configs;
+using CodeBase.UI.CharacterSelect.Enums;
 using UniRx;
 
 namespace CodeBase.UI.CharacterSelect.Services
@@ -11,5 +12,6 @@ namespace CodeBase.UI.CharacterSelect.Services
         
         void SwitchToNextCharacter();
         void SwitchToPreviousCharacter();
+        void SetCharacter(CharacterTypeId characterId);
     }
 } 
