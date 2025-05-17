@@ -70,6 +70,7 @@ crashlytics-build.properties
 src/Library
 src/.idea
 src/Logs
+src/Temp
 
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta

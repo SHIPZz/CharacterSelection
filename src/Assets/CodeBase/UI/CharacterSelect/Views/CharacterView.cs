@@ -1,4 +1,4 @@
-﻿using CodeBase.UI.Animation;
+﻿using CodeBase.Animations;
 using CodeBase.UI.CharacterSelect.Enums;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,8 +1,8 @@
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace CodeBase.UI.Animation
+namespace CodeBase.Animations
 {
     public class SliderAnimator : MonoBehaviour
     {

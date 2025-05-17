@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using CodeBase.Animations;
 using CodeBase.UI.AbstractWindow;
-using CodeBase.UI.Animation;
 using CodeBase.UI.CharacterSelect.Configs;
 using CodeBase.UI.CharacterSelect.Enums;
 using UniRx;

@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace CodeBase.UI.Animation
+namespace CodeBase.Animations
 {
     public class VerticalMoveAnimator : MonoBehaviour
     {

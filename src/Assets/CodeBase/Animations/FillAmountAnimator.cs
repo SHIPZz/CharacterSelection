@@ -1,8 +1,8 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
-namespace CodeBase.UI.Animation
+namespace CodeBase.Animations
 {
     [RequireComponent(typeof(Image))]
     public class FillAmountAnimator : MonoBehaviour

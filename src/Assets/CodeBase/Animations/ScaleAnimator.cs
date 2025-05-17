@@ -1,8 +1,8 @@
-using UnityEngine;
-using DG.Tweening;
 using System;
+using DG.Tweening;
+using UnityEngine;
 
-namespace CodeBase.UI.Animation
+namespace CodeBase.Animations
 {
     public class ScaleAnimator : MonoBehaviour
     {
