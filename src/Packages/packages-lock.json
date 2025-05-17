@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "8042b29ff87dd5506d7aad72bd6d8d7405985f27"
     },
-    "com.github-glitchenzo.nugetforunity": {
-      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "fe31ad0904abee296b5ea72c6073157accba59e8"
-    },
     "com.unity.2d.animation": {
       "version": "10.1.4",
       "depth": 0,
@@ -32,11 +25,11 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
+        "com.unity.burst": "1.8.4",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.mathematics": "1.1.0",
-        "com.unity.modules.uielements": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.burst": "1.8.4"
+        "com.unity.modules.uielements": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -214,10 +207,10 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.unityanalytics": "1.0.0",
         "com.unity.services.core": "1.12.5",
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.modules.unityanalytics": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.services.authentication": "2.7.4"
       },
       "url": "https://packages.unity.com"
