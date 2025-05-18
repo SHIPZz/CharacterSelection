@@ -10,11 +10,8 @@ namespace CodeBase.UI.AbstractWindow
         [SerializeField] protected CanvasAnimator CanvasAnimator;
         
         private readonly Subject<Unit> _onOpenStarted = new();
-        private readonly Subject<Unit> _onOpened= new();
 
         public IObservable<Unit> OnOpenStartedEvent => _onOpenStarted;
-        
-        public IObservable<Unit> OnOpened => _onOpened;
 
         protected virtual void Awake()
         {
@@ -58,7 +55,6 @@ namespace CodeBase.UI.AbstractWindow
         {
             OnOpen();
             onOpened?.Invoke();
-            _onOpened?.OnNext(default);
         }
 
         private void MarkClosed(Action onClosed)

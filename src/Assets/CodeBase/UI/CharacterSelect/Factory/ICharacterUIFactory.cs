@@ -6,6 +6,6 @@ namespace CodeBase.UI.CharacterSelect.Factory
 {
     public interface ICharacterUIFactory
     {
-        CharacterView CreateCharacterView(Transform parent, CharacterData character);
+        CharacterView CreateCharacterView(Transform parent, CharacterData characterData);
     }
 }

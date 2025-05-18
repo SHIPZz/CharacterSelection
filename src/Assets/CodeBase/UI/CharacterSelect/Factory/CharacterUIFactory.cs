@@ -19,12 +19,12 @@ namespace CodeBase.UI.CharacterSelect.Factory
             _instantiator = instantiator;
         }
 
-        public CharacterView CreateCharacterView(Transform parent, CharacterData character)
+        public CharacterView CreateCharacterView(Transform parent, CharacterData characterData)
         {
             CharacterView prefab = _assetProvider.LoadAsset<CharacterView>(AssetPath.CharacterView);
             
            return _instantiator.InstantiatePrefabForComponent<CharacterView>(prefab, parent)
-                .With(x => x.Init(character.TypeId, character.Icon, character.Background,character.Progress));
+                .With(x => x.Init(characterData.TypeId, characterData.Icon, characterData.Background,characterData.Progress));
         }
     }
 }

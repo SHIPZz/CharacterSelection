@@ -18,13 +18,13 @@ namespace CodeBase.Infrastructure.States.States
         private readonly IStateMachine _stateMachine;
         private readonly IWindowService _windowService;
         private readonly IPersistentService _persistentService;
-        private readonly ISaveOnApplicationPauseSystem _saveOnApplicationPauseSystem;
+        private readonly SaveOnApplicationFocusChangedSystem _saveOnApplicationPauseSystem;
         private readonly IStaticDataService _staticDataService;
 
         public BootstrapState(IStateMachine stateMachine,
             IWindowService windowService,
             IPersistentService persistentService,
-            ISaveOnApplicationPauseSystem saveOnApplicationPauseSystem,
+            SaveOnApplicationFocusChangedSystem saveOnApplicationPauseSystem,
             IStaticDataService staticDataService)
         {
             _windowService = windowService;

@@ -61,8 +61,7 @@ namespace CodeBase.UI.CharacterSelect.Services
         {
             CharacterData lastSavedCharacter = progressData.PlayerData.LastSelectedCharacter;
 
-            CharacterData characterData =
-                _characterConfig.Characters.FirstOrDefault(x => x.TypeId == lastSavedCharacter.TypeId);
+            CharacterData characterData = _characterConfig.Characters.FirstOrDefault(x => x.TypeId == lastSavedCharacter.TypeId);
             lastSavedCharacter.SetIcons(characterData.Icon, characterData.Background, characterData.MainBackground);
 
             _currentCharacter.Value = lastSavedCharacter;

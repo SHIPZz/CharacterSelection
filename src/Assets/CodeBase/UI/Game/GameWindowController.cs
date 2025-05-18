@@ -27,15 +27,9 @@ namespace CodeBase.UI.Game
                 .AddTo(_disposables);
         }
 
-        public void BindView(GameWindow window)
-        {
-            _window = window;
-        }
+        public void BindView(GameWindow window) => _window = window;
 
-        public void Dispose()
-        {
-            _disposables.Dispose();
-        }
+        public void Dispose() => _disposables.Dispose();
 
         private void OnMenuClicked()
         {
