@@ -23,6 +23,28 @@ namespace CodeBase.Animations
             _canvasGroup.alpha = 0;
             _canvas.enabled = false;
             
+            CreateTweens();
+        }
+
+        private void OnDestroy()
+        {
+            _fadeInTween?.Kill();
+            _fadeOutTween?.Kill();
+        }
+
+        public void Show(Action onComplete = null)
+        {
+            _canvas.enabled = true;
+            _fadeInTween.OnComplete(() => onComplete?.Invoke()).Restart();
+        }
+
+        public void Hide(Action onComplete = null)
+        {
+            _fadeOutTween.OnComplete(() => onComplete?.Invoke()).Restart();
+        }
+
+        private void CreateTweens()
+        {
             _fadeInTween = _canvasGroup
                 .DOFade(_initialAlpha, _fadeInDuration)
                 .SetEase(_easeType)
@@ -37,23 +59,6 @@ namespace CodeBase.Animations
                 .Pause()
                 .OnComplete(() => _canvas.enabled = false)
                 .OnKill(() => _fadeOutTween = null);
-        }
-
-        public void Show(Action onComplete = null)
-        {
-            _canvas.enabled = true;
-            _fadeInTween.OnComplete(() => onComplete?.Invoke()).Restart();
-        }
-
-        public void Hide(Action onComplete = null)
-        {
-            _fadeOutTween.OnComplete(() => onComplete?.Invoke()).Restart();
-        }
-
-        private void OnDestroy()
-        {
-            _fadeInTween?.Kill();
-            _fadeOutTween?.Kill();
         }
     }
 } 

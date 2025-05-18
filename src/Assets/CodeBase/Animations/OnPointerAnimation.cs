@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -19,6 +20,8 @@ namespace CodeBase.Animations
             _targetRectTransform = GetComponent<RectTransform>();
             _initialAnchoredScale = _targetRectTransform.localScale;
         }
+
+        private void OnDestroy() => _tween?.Kill();
 
         public void OnPointerDown(PointerEventData eventData)
         {

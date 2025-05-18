@@ -1,5 +1,4 @@
-﻿using CodeBase.Common.Services.Levels;
-using CodeBase.Common.Services.Persistent;
+﻿using CodeBase.Common.Services.Persistent;
 using CodeBase.Common.Services.SaveLoad;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Loading;
@@ -39,7 +38,6 @@ namespace CodeBase.Infrastructure.Installers
 
         private void BindGameplayServices()
         {
-            Container.Bind<ILevelProvider>().To<LevelProvider>().AsSingle();
             Container.BindInterfacesTo<SoundService>().AsSingle();
             Container.BindInterfacesTo<SoundFactory>().AsSingle();
         }
