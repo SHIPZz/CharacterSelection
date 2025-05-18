@@ -1,14 +1,10 @@
-using System.Collections.Generic;
 using CodeBase.Infrastructure.States.StateMachine;
 using CodeBase.Infrastructure.States.States;
-using CodeBase.UI.CharacterSelect.Configs;
 using CodeBase.UI.CharacterSelect.Services;
 using CodeBase.UI.CharacterSelect.Views;
 using CodeBase.UI.Controllers;
 using CodeBase.UI.Services.Window;
 using UniRx;
-using UnityEngine;
-using UnityEngine.Pool;
 
 namespace CodeBase.UI.CharacterSelect.Controllers
 {
@@ -56,7 +52,12 @@ namespace CodeBase.UI.CharacterSelect.Controllers
 
         public void BindView(CharacterSelectWindow window) => _window = window;
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            _disposables.Dispose();
+            
+            _windowService.Close<CharacterPanelView>();
+        }
 
         private void OnPreviousCharacterClicked() => _characterService.SwitchToPreviousCharacter();
 
