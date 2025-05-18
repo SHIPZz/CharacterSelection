@@ -1,5 +1,4 @@
-﻿using CodeBase.Common.Services.Input;
-using CodeBase.Common.Services.Levels;
+﻿using CodeBase.Common.Services.Levels;
 using CodeBase.Common.Services.Persistent;
 using CodeBase.Common.Services.SaveLoad;
 using CodeBase.Infrastructure.AssetManagement;
@@ -59,7 +58,6 @@ namespace CodeBase.Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<MenuState>().AsSingle();
             Container.BindInterfacesAndSelfTo<LoadingCharacterSelectState>().AsSingle();
             Container.BindInterfacesAndSelfTo<CharacterSelectState>().AsSingle();
-            Container.BindInterfacesAndSelfTo<VictoryState>().AsSingle();
             Container.BindInterfacesAndSelfTo<LoadGameState>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameState>().AsSingle();
         }
@@ -79,7 +77,6 @@ namespace CodeBase.Infrastructure.Installers
         {
             Container.Bind<ISceneLoader>().To<SceneLoader>().AsSingle();
             Container.Bind<IPersistentService>().To<PersistentService>().AsSingle();
-            Container.Bind<IInputService>().To<StandaloneInputService>().AsSingle();
             Container.Bind<ISaveLoadSystem>().To<PlayerPrefsSaveLoadSystem>().AsSingle();
             Container.BindInterfacesTo<SaveOnApplicationFocusChangedSystem>().AsSingle();
         }

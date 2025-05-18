@@ -17,7 +17,6 @@ namespace CodeBase.UI.CharacterSelect.Views
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private float _scrollDuration = 0.3f;
         [SerializeField] private float _initialXPosition = 260f;
-        [SerializeField] private HorizontalLayoutGroup _horizontalLayoutGroup;
 
         private readonly Subject<CharacterTypeId> _onCharacterSelected = new();
         
