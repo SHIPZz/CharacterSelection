@@ -76,7 +76,7 @@ namespace CodeBase.Infrastructure.Installers
             Container.Bind<ISceneLoader>().To<SceneLoader>().AsSingle();
             Container.Bind<IPersistentService>().To<PersistentService>().AsSingle();
             Container.Bind<ISaveLoadSystem>().To<PlayerPrefsSaveLoadSystem>().AsSingle();
-            Container.BindInterfacesTo<SaveOnApplicationFocusChangedSystem>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SaveOnApplicationFocusChangedSystem>().AsSingle();
         }
 
         public void Initialize()
