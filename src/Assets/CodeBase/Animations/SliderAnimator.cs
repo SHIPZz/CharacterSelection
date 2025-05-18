@@ -6,17 +6,14 @@ namespace CodeBase.Animations
 {
     public class SliderAnimator : MonoBehaviour
     {
-        [SerializeField] private float _resetDuration = 0.5f;
         [SerializeField] private float _setValueDuration = 0.3f;
         [SerializeField] private Slider _slider;
 
         private Tween _setValueTween;
 
         private float _targetValue;
-        private void OnDestroy()
-        {
-            _setValueTween?.Kill();
-        }
+
+        private void OnDestroy() => _setValueTween?.Kill();
 
         public void SetValue(float value)
         {
