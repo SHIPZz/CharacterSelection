@@ -89,48 +89,11 @@ namespace CodeBase.UI.Services.Window
             return OpenWindowInternal<TWindow>(parent, onTop, onOpened);
         }
 
-        private TWindow OpenWindowInternal<TWindow>(Transform parent, bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase
+        public void Close<TWindow>(Action onClosed = null) where TWindow : AbstractWindowBase
         {
             Type windowType = typeof(TWindow);
 
-            if (!_windowBindings.TryGetValue(windowType, out var bindingInfo))
-                throw new InvalidOperationException($"No binding found for window type {windowType.Name}");
-
-            if (_activeWindows.ContainsKey(typeof(TWindow)))
-            {
-                var window = (TWindow)_activeWindows[windowType].Window;
-                SetWindowSortingOrder(window, onTop);
-                onOpened?.Invoke();
-                return window;
-            }
-
-            TWindow createdWindow = _instantiator.InstantiatePrefabForComponent<TWindow>(bindingInfo.Prefab, parent);
-
-            if(createdWindow is null)
-                throw new ArgumentNullException(nameof(createdWindow));
-            
-            IController<TWindow> controller = (IController<TWindow>)_instantiator.Instantiate(bindingInfo.ControllerType);
-            
-            if(controller is null)
-                throw new ArgumentNullException(nameof(controller));
-
-            BindModelIfHas(bindingInfo, controller);
-
-            InitWindow(controller, createdWindow, onOpened);
-
-            _activeWindows[windowType] = (createdWindow, (controller));
-
-            SetWindowSortingOrder(createdWindow, onTop);
-
-            return createdWindow;
-        }
-
-        public void Close<TWindow>(Action onClosed = null) where TWindow : AbstractWindowBase
-        {
-            var windowType = typeof(TWindow);
-
-            if (!_activeWindows.TryGetValue(windowType,
-                    out (AbstractWindowBase Window, IController Controller) windowData))
+            if (!_activeWindows.TryGetValue(windowType, out (AbstractWindowBase Window, IController Controller) windowData))
             {
                 onClosed?.Invoke();
                 return;
@@ -152,21 +115,11 @@ namespace CodeBase.UI.Services.Window
                 return;
             }
 
-            int remainingWindows = _activeWindows.Count;
-            Action onWindowClosed = () =>
-            {
-                remainingWindows--;
-                if (remainingWindows <= 0)
-                {
-                    onAllClosed?.Invoke();
-                }
-            };
-
             foreach ((AbstractWindowBase Window, IController Controller) windowData in _activeWindows.Values)
             {
                 if (windowData.Window != null && windowData.Window.gameObject != null)
                 {
-                    windowData.Window.Close(onWindowClosed);
+                    windowData.Window.Close();
                 }
 
                 if (windowData.Controller is IDisposable disposable)
@@ -174,7 +127,64 @@ namespace CodeBase.UI.Services.Window
             }
 
             _activeWindows.Clear();
+            onAllClosed?.Invoke();
             _currentSortingOrder = BaseSortingOrder;
+        }
+
+        private TWindow OpenWindowInternal<TWindow>(Transform parent, bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase
+        {
+            Type windowType = typeof(TWindow);
+
+            if (!_windowBindings.TryGetValue(windowType, out var bindingInfo))
+                throw new InvalidOperationException($"No binding found for window type {windowType.Name}");
+
+            if (TryGetActiveWindow(onTop, onOpened, windowType, out TWindow openWindowInternal)) 
+                return openWindowInternal;
+
+            TWindow createdWindow = _instantiator.InstantiatePrefabForComponent<TWindow>(bindingInfo.Prefab, parent);
+
+            if(createdWindow is null)
+                throw new ArgumentNullException(nameof(createdWindow));
+            
+            IController<TWindow> controller = (IController<TWindow>)_instantiator.Instantiate(bindingInfo.ControllerType);
+            
+            if(controller is null)
+                throw new ArgumentNullException(nameof(controller));
+
+            BindModelIfHas(bindingInfo, controller);
+
+            InitWindow(controller, createdWindow, onOpened);
+
+            FillActiveWindows(windowType, createdWindow, controller);
+
+            SetWindowSortingOrder(createdWindow, onTop);
+
+            return createdWindow;
+        }
+
+        private bool TryGetActiveWindow<TWindow>(bool onTop, Action onOpened, Type windowType, out TWindow openWindowInternal)
+            where TWindow : AbstractWindowBase
+        {
+            openWindowInternal = null;
+            
+            if (_activeWindows.ContainsKey(typeof(TWindow)))
+            {
+                var window = (TWindow)_activeWindows[windowType].Window;
+                SetWindowSortingOrder(window, onTop);
+                onOpened?.Invoke();
+                openWindowInternal = window;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void InitWindow<TWindow>(IController<TWindow> controller, TWindow window, Action onOpened = null)
+            where TWindow : AbstractWindowBase
+        {
+            controller.BindView(window);
+            controller.Initialize();
+            window.Open(onOpened);
         }
 
         private void BindModelIfHas(WindowBindingInfo bindingInfo, IController controller)
@@ -188,20 +198,18 @@ namespace CodeBase.UI.Services.Window
             }
         }
 
-        private static void InitWindow<TWindow>(IController<TWindow> controller, TWindow window, Action onOpened = null)
-            where TWindow : AbstractWindowBase
-        {
-            controller.BindView(window);
-            controller.Initialize();
-            window.Open(onOpened);
-        }
-
         private void SetWindowSortingOrder(AbstractWindowBase window, bool onTop)
         {
             if (window.TryGetComponent<Canvas>(out var canvas))
             {
                 canvas.sortingOrder = onTop ? TopSortingOrder : _currentSortingOrder++;
             }
+        }
+
+        private void FillActiveWindows<TWindow>(Type windowType, TWindow createdWindow, IController<TWindow> controller)
+            where TWindow : AbstractWindowBase
+        {
+            _activeWindows[windowType] = (createdWindow, (controller));
         }
     }
 }

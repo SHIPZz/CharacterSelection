@@ -10,8 +10,8 @@ namespace CodeBase.Animations
         [SerializeField] private Transform _targetTransform;
         
         private Vector3 _initialPosition;
-        private Tweener _highlightTween;
-        private Tweener _unhighlightTween;
+        private Tweener _raiseTween;
+        private Tweener _putDownTween;
 
         private void Awake()
         {
@@ -21,31 +21,31 @@ namespace CodeBase.Animations
 
         public void Raise()
         {
-            _unhighlightTween.Pause();
-            _highlightTween.Restart();
+            _putDownTween.Pause();
+            _raiseTween.Restart();
         }
 
         public void Down()
         {
-            _highlightTween.Pause();
-            _unhighlightTween.Restart();
+            _raiseTween.Pause();
+            _putDownTween.Restart();
         }
 
         private void OnDestroy()
         {
-            _highlightTween?.Kill();
-            _unhighlightTween?.Kill();
+            _raiseTween?.Kill();
+            _putDownTween?.Kill();
         }
 
         private void CreateTweens()
         {
-            _highlightTween = _targetTransform
+            _raiseTween = _targetTransform
                 .DOLocalMoveY(_initialPosition.y + _highlightOffset, _animationDuration)
                 .SetEase(Ease.OutQuad)
                 .SetAutoKill(false)
                 .Pause();
 
-            _unhighlightTween = _targetTransform
+            _putDownTween = _targetTransform
                 .DOLocalMoveY(_initialPosition.y, _animationDuration)
                 .SetEase(Ease.OutQuad)
                 .SetAutoKill(false)

@@ -46,9 +46,7 @@ namespace CodeBase.Infrastructure.States.States
             
             _saveOnApplicationPauseSystem.Initialize();
 
-            _windowService.OpenWindow<LoadingCurtainWindow>();
-
-            _stateMachine.Enter<LoadingMenuState>();
+            _windowService.OpenWindow<LoadingCurtainWindow>(onTop: true, onOpened: () => _stateMachine.Enter<LoadingMenuState>());
         }
 
         private void LoadData() => _persistentService.LoadAll();

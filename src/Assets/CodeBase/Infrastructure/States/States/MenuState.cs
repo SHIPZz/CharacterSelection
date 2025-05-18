@@ -17,7 +17,7 @@ namespace CodeBase.Infrastructure.States.States
 
         public void Enter()
         {
-            _windowService.Close<LoadingCurtainWindow>(() => _windowService.OpenWindow<MenuWindow>());
+            _windowService.OpenWindow<MenuWindow>(true, () => _windowService.Close<LoadingCurtainWindow>());
         }
 
         public void Exit()

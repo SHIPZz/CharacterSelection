@@ -71,7 +71,7 @@ src/Library
 src/.idea
 src/Logs
 src/Temp
-src/obj
+src/obj/Debug
 
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
