@@ -133,7 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add92881728f89f4c8da374409e92ab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animationDuration: 0.3
+  _raiseAnimationDuration: 0.3
+  _downAnimationDuration: 0.1
+  _ease: 6
   _highlightOffset: 50
   _targetTransform: {fileID: 8055713564770427690}
 --- !u!114 &869658418608802302
@@ -148,7 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f075fbc9151f0e40b91e2f34fba4723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resetDuration: 0.1
   _setValueDuration: 0.3
   _slider: {fileID: 3184061488124861627}
 --- !u!1 &3811202088557801508

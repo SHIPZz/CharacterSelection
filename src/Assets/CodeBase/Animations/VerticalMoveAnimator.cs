@@ -5,51 +5,35 @@ namespace CodeBase.Animations
 {
     public class VerticalMoveAnimator : MonoBehaviour
     {
-        [SerializeField] private float _animationDuration = 0.3f;
+        [SerializeField] private float _raiseAnimationDuration = 0.3f;
+        [SerializeField] private float _downAnimationDuration = 0.3f;
+        [SerializeField] private Ease _ease = Ease.InOutQuad;
         [SerializeField] private float _highlightOffset = 50f;
         [SerializeField] private Transform _targetTransform;
-        
-        private Vector3 _initialPosition;
-        private Tweener _raiseTween;
-        private Tweener _putDownTween;
 
-        private void Awake()
-        {
-            _initialPosition = _targetTransform.localPosition;
-            CreateTweens();
-        }
+        private Vector3 _initialPosition;
+        private Tweener _tween;
+
+        private void Awake() => _initialPosition = _targetTransform.localPosition;
 
         public void Raise()
         {
-            _putDownTween.Pause();
-            _raiseTween.Restart();
+            _tween?.Kill();
+
+            _tween = _targetTransform
+                .DOLocalMoveY(_initialPosition.y + _highlightOffset, _raiseAnimationDuration)
+                .SetEase(_ease);
         }
 
         public void Down()
         {
-            _raiseTween.Pause();
-            _putDownTween.Restart();
+            _tween?.Kill();
+
+            _tween = _targetTransform
+                .DOLocalMoveY(_initialPosition.y, _downAnimationDuration)
+                .SetEase(_ease);
         }
 
-        private void OnDestroy()
-        {
-            _raiseTween?.Kill();
-            _putDownTween?.Kill();
-        }
-
-        private void CreateTweens()
-        {
-            _raiseTween = _targetTransform
-                .DOLocalMoveY(_initialPosition.y + _highlightOffset, _animationDuration)
-                .SetEase(Ease.OutQuad)
-                .SetAutoKill(false)
-                .Pause();
-
-            _putDownTween = _targetTransform
-                .DOLocalMoveY(_initialPosition.y, _animationDuration)
-                .SetEase(Ease.OutQuad)
-                .SetAutoKill(false)
-                .Pause();
-        }
+        private void OnDestroy() => _tween?.Kill();
     }
-} 
+}
