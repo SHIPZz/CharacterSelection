@@ -38,6 +38,8 @@ namespace CodeBase.UI.CharacterSelect.Views
         
         public void ForceLayoutRebuild() => LayoutRebuilder.ForceRebuildLayoutImmediate(_scrollContent);
 
+        public void UpdateCharacterProgress(CharacterTypeId id, float progress) => _characterViews.Find(x => x.Id == id)?.SetProgress(progress);
+
         public void SetCharacters(IEnumerable<CharacterView> characterViews)
         {
             _characterViews.AddRange(characterViews);

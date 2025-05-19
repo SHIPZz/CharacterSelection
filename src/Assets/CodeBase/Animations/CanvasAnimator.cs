@@ -35,11 +35,13 @@ namespace CodeBase.Animations
         public void Show(Action onComplete = null)
         {
             _canvas.enabled = true;
+            _fadeOutTween.Pause();
             _fadeInTween.OnComplete(() => onComplete?.Invoke()).Restart();
         }
 
         public void Hide(Action onComplete = null)
         {
+            _fadeInTween.Pause();
             _fadeOutTween.OnComplete(() => onComplete?.Invoke()).Restart();
         }
 

@@ -31,15 +31,21 @@ namespace CodeBase.UI.CharacterSelect.Views
 
         protected override void OnOpen() => AnimateWindowShow();
 
-        public void SwitchCharacter(CharacterData character)
+        public void SwitchCharacter(CharacterVisualData characterVisualData)
         {
             _characterScaleAnimator.AnimateToZero();
 
             _characterScaleAnimator.OnAnimationComplete(() =>
             {
-                _mainSelectedCharacter.Init(character.TypeId, character.Icon, character.MainBackground, character.Progress);
+                _mainSelectedCharacter.Init(characterVisualData.Id, characterVisualData.Icon, characterVisualData.MainBackground, characterVisualData.Progress);
                 _characterScaleAnimator.AnimateToOne();
             });
+        }
+
+        public void UpdateMainCharacterProgress(CharacterTypeId id, float progress)
+        {
+            if(_mainSelectedCharacter.Id == id)
+                _mainSelectedCharacter.SetProgress(progress);
         }
 
         private void AnimateWindowShow() => _windowScaleAnimator.AnimateToOne();

@@ -7,8 +7,8 @@ namespace CodeBase.UI.CharacterSelect.Services
 {
     public interface ICharacterSelectionService
     {
-        IReadOnlyList<CharacterData> Characters { get; }
-        IReadOnlyReactiveProperty<CharacterData> CurrentCharacter { get; }
+        IReadOnlyList<CharacterTypeId> Characters { get; }
+        IReadOnlyReactiveProperty<CharacterTypeId> CurrentCharacterId { get; }
         
         void SwitchToNextCharacter();
         void SwitchToPreviousCharacter();

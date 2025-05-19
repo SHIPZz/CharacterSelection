@@ -59,6 +59,7 @@ namespace CodeBase.Infrastructure.States.States
             _windowService.Bind<CharacterSelectWindow, CharacterSelectWindowController>();
             _windowService.Bind<CharacterPanelView, CharacterPanelController>();
             _windowService.Bind<GameWindow, GameWindowController>();
+            _windowService.Bind<CharacterProgressCheatWindow, CharacterProgressCheatController>();
         }
 
         public void Exit() { }

@@ -29,5 +29,6 @@ namespace CodeBase.UI.Services.Window
 
         void CloseAll(Action onAllClosed = null);
         TWindow OpenWindowInParent<TWindow>(Transform parent, bool onTop = false, Action onOpened = null) where TWindow : AbstractWindowBase;
+        bool IsWindowOpen<TWindow>() where TWindow : AbstractWindowBase;
     }
 }

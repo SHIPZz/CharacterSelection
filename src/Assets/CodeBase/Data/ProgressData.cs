@@ -1,6 +1,6 @@
 ﻿using System;
-using CodeBase.UI.CharacterSelect;
-using CodeBase.UI.CharacterSelect.Configs;
+using System.Collections.Generic;
+using CodeBase.Gameplay.Characters.Configs;
 using CodeBase.UI.CharacterSelect.Enums;
 
 namespace CodeBase.Data
@@ -21,11 +21,8 @@ namespace CodeBase.Data
     [Serializable]
     public class PlayerData
     {
-        public CharacterData LastSelectedCharacter = new()
-        {
-            TypeId = CharacterTypeId.FirstHero,
-        };
+        public CharacterTypeId LastSelectedCharacter = CharacterTypeId.FirstHero;
 
-        public int LastSelectedCharacterIndex;
+        public List<CharacterProgressData> CharacterProgressDatas = new();
     }
 }

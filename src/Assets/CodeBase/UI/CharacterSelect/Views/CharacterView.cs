@@ -30,6 +30,11 @@ namespace CodeBase.UI.CharacterSelect.Views
             _sliderAnimator.Reset();
             _sliderAnimator.SetValue(progress);
         }
+        
+        public void SetProgress(float progress)
+        {
+            _sliderAnimator.SetValue(progress);
+        }
 
         public void Raise() => _verticalMoveAnimator.Raise();
 

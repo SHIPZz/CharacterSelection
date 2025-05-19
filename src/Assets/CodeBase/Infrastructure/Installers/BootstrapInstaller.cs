@@ -1,5 +1,6 @@
 ﻿using CodeBase.Common.Services.Persistent;
 using CodeBase.Common.Services.SaveLoad;
+using CodeBase.Gameplay.Characters.Services;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Loading;
 using CodeBase.Infrastructure.States.Factory;
@@ -40,6 +41,7 @@ namespace CodeBase.Infrastructure.Installers
         {
             Container.BindInterfacesTo<SoundService>().AsSingle();
             Container.BindInterfacesTo<SoundFactory>().AsSingle();
+            Container.BindInterfacesTo<CharacterProgressService>().AsSingle();
         }
 
         private void BindUIServices()

@@ -10,7 +10,6 @@ namespace CodeBase.UI.CharacterSelect.Configs
     {
         public CharacterTypeId TypeId;
         public string Name;
-        public float Progress;
         
         [JsonIgnore] public Sprite Icon;
         [JsonIgnore] public Sprite Background;
@@ -22,7 +21,6 @@ namespace CodeBase.UI.CharacterSelect.Configs
             Name = name;
             Icon = icon;
             Background = background;
-            Progress = progress;
             MainBackground = mainBackground;
         }
 
@@ -34,10 +32,10 @@ namespace CodeBase.UI.CharacterSelect.Configs
         }
 
         public bool Equals(CharacterData other) => TypeId == other.TypeId && Name == other.Name &&
-                                                   Equals(Icon, other.Icon) && Progress.Equals(other.Progress);
+                                                   Equals(Icon, other.Icon);
 
         public override bool Equals(object obj) => obj is CharacterData other && Equals(other);
 
-        public override int GetHashCode() => HashCode.Combine((int)TypeId, Name, Icon, Progress);
+        public override int GetHashCode() => HashCode.Combine((int)TypeId, Name, Icon);
     }
 }

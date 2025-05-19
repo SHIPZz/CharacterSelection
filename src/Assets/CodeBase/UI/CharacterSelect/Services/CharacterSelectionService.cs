@@ -11,27 +11,27 @@ namespace CodeBase.UI.CharacterSelect.Services
 {
     public class CharacterSelectionService : ICharacterSelectionService, IInitializable, IProgressWatcher
     {
-        private readonly List<CharacterData> _characters = new();
-        private readonly ReactiveProperty<CharacterData> _currentCharacter = new();
+        private readonly List<CharacterTypeId> _characters = new();
+        private readonly ReactiveProperty<CharacterTypeId> _currentCharacter = new();
         private readonly CharacterConfig _characterConfig;
 
-        private int _currentCharacterIndex;
+        public IReadOnlyList<CharacterTypeId> Characters => _characters;
 
-        public IReadOnlyList<CharacterData> Characters => _characters;
-
-        public IReadOnlyReactiveProperty<CharacterData> CurrentCharacter => _currentCharacter;
+        public IReadOnlyReactiveProperty<CharacterTypeId> CurrentCharacterId => _currentCharacter;
 
         public CharacterSelectionService(CharacterConfig characterConfig) => _characterConfig = characterConfig;
 
-        public void Initialize() => _characters.AddRange(_characterConfig.Characters);
+        public void Initialize() => _characters.AddRange(_characterConfig.Characters.Select(x => x.TypeId));
 
         public void SwitchToNextCharacter()
         {
             if (_characters.Count == 0)
                 return;
 
-            _currentCharacterIndex = (_currentCharacterIndex + 1) % _characters.Count;
-            _currentCharacter.Value = _characters[_currentCharacterIndex];
+            int currentIndex = _characters.IndexOf(_currentCharacter.Value);
+            
+            currentIndex = (currentIndex + 1) % _characters.Count;
+            _currentCharacter.Value = _characters[currentIndex];
         }
 
         public void SwitchToPreviousCharacter()
@@ -39,33 +39,32 @@ namespace CodeBase.UI.CharacterSelect.Services
             if (_characters.Count == 0)
                 return;
 
-            _currentCharacterIndex = (_currentCharacterIndex - 1 + _characters.Count) % _characters.Count;
-            _currentCharacter.Value = _characters[_currentCharacterIndex];
+            int currentIndex = _characters.IndexOf(_currentCharacter.Value);
+            
+            currentIndex = (currentIndex - 1 + _characters.Count) % _characters.Count;
+            _currentCharacter.Value = _characters[currentIndex];
         }
 
         public void SetCharacter(CharacterTypeId characterId)
         {
-            CharacterData targetCharacter = _characters.Find(x => x.TypeId == characterId);
+            CharacterTypeId targetCharacter = _characters.Find(x => x == characterId);
 
-            _currentCharacterIndex = _characters.IndexOf(targetCharacter);
             _currentCharacter.Value = targetCharacter;
         }
 
         public void Save(ProgressData progressData)
         {
             progressData.PlayerData.LastSelectedCharacter = _currentCharacter.Value;
-            progressData.PlayerData.LastSelectedCharacterIndex = _currentCharacterIndex;
         }
 
         public void Load(ProgressData progressData)
         {
-            CharacterData lastSavedCharacter = progressData.PlayerData.LastSelectedCharacter;
+            CharacterTypeId lastSavedCharacterId = progressData.PlayerData.LastSelectedCharacter;
 
-            CharacterData characterData = _characterConfig.Characters.FirstOrDefault(x => x.TypeId == lastSavedCharacter.TypeId);
-            lastSavedCharacter.SetIcons(characterData.Icon, characterData.Background, characterData.MainBackground);
+            CharacterData characterData = _characterConfig.Characters.FirstOrDefault(x => x.TypeId == lastSavedCharacterId);
+            characterData.SetIcons(characterData.Icon, characterData.Background, characterData.MainBackground);
 
-            _currentCharacter.Value = lastSavedCharacter;
-            _currentCharacterIndex = progressData.PlayerData.LastSelectedCharacterIndex;
+            _currentCharacter.Value = characterData.TypeId;
         }
     }
 }

@@ -71,6 +71,12 @@ namespace CodeBase.UI.Services.Window
                 Prefab = _staticDataService.GetWindow<TWindow>()
             };
         }
+        
+        public bool IsWindowOpen<TWindow>() where TWindow : AbstractWindowBase
+        {
+            Type windowType = typeof(TWindow);
+            return _activeWindows.ContainsKey(windowType);
+        }
 
         public async UniTask<TWindow> OpenWindowAsync<TWindow>(bool onTop = false, Action onOpened = null, float delay = 1f, CancellationToken token = default) where TWindow : AbstractWindowBase
         {

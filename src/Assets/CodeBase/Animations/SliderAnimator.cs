@@ -19,7 +19,7 @@ namespace CodeBase.Animations
         {
             _targetValue = value;
             
-            _setValueTween.Kill();
+            _setValueTween?.Kill();
             _setValueTween = _slider.DOValue(_targetValue, _setValueDuration);
         }
 

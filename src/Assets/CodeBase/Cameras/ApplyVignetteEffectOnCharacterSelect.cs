@@ -20,7 +20,7 @@ namespace CodeBase.Cameras
 
         private void Start()
         {
-            _characterSelectionService.CurrentCharacter
+            _characterSelectionService.CurrentCharacterId
                 .Skip(SkipFirstSelection)
                 .Subscribe(_ => _vignetteAnimator.Play())
                 .AddTo(this);
